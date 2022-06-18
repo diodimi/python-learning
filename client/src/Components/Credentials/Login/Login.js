@@ -3,6 +3,8 @@ import { Button } from "react-bootstrap";
 import Card from "../../UI/Card/Card";
 import classes from "./Login.module.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 import './Login.scss'
 
 const Login = (props) => {
@@ -11,6 +13,7 @@ const Login = (props) => {
   const [enteredPassword, setEnteredPassword] = useState("");
   const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
+  const navigate = useNavigate();
 
  
 
@@ -63,28 +66,47 @@ const Login = (props) => {
     props.onSignUp(true);
   }
 
+  const loginHandler=()=>{
+      axios.post("http://localhost:3001/accounts/get", {
+          
+          email: enteredEmail,
+          password: enteredPassword,
+        }).then((response)=>{
+        console.log(response.data)
+        const found = response.data.some((el) => el.email === enteredEmail);
+        if(found){
+          props.onLogin(true)
+          navigate('/Home');
+        }else{
+          console.log("No logged in")
+
+        }
+        })
+  }
+
   return (
 
+    <div className="sass-bg">
     <div className={classes.center}>
   <Card className={classes.logForm}>
       
-    <div class="animation-container">
-	<div class="lightning-container">
-		<div class="lightning white"></div>
-		<div class="lightning red"></div>
+    <div className="animation-container">
+	<div className="lightning-container">
+		<div className="lightning white"></div>
+		<div className="lightning red"></div>
 	</div>
-	<div class="boom-container">
-		<div class="shape circle big white"></div>
-		<div class="shape circle white"></div>
-		<div class="shape triangle big yellow"></div>
-		<div class="shape disc white"></div>
-		<div class="shape triangle blue"></div>
+	<div className="boom-container">
+		<div className="shape circle big white"></div>
+		<div className="shape circle white"></div>
+		<div className="shape triangle big yellow"></div>
+		<div className="shape disc white"></div>
+		<div className="shape triangle blue"></div>
 	</div>
-	<div class="boom-container second">
-		<div class="shape circle big white"></div>
-		<div class="shape circle white"></div>
-		<div class="shape disc white"></div>
-		<div class="shape triangle blue"></div>
+	<div className="boom-container second">
+		<div className="shape circle big white"></div>
+		<div className="shape circle white"></div>
+		<div className="shape disc white"></div>
+		<div className="shape triangle blue"></div>
 	</div>
   </div>
 
@@ -127,6 +149,7 @@ const Login = (props) => {
               className={`${classes.btn} ${classes.action}`}
               size="sm"
               disabled={!formIsValid}
+              onClick={loginHandler}
             >
               Login
             </Button>
@@ -135,9 +158,9 @@ const Login = (props) => {
       </Card>
   </div>
 
+  </div>
 
-
-    // <div class={classes.center}>
+    // <div className={classes.center}>
     //   <Card>
     //     <form onSubmit={submitHandler}>
     //       <div

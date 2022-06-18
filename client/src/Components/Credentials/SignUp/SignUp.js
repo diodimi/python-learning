@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import classes from "./SignUp.module.css";
 import Card from "../../UI/Card/Card";
 import { Button } from "react-bootstrap";
+import Alert from 'react-popup-alert'
+
+
 
 import Axios from "axios";
 
@@ -15,8 +18,13 @@ const SignUp = (props) => {
   const [emailIsValid, setEmailIsValid] = useState();
   const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
-
+  const [alert, setAlert] = React.useState({
+    type: 'error',
+    text: 'This is a alert message',
+    show: false
+  })
   const emailChangeHandler = (event) => {
+    
     setEnteredEmail(event.target.value);
 
     setFormIsValid(
@@ -99,6 +107,7 @@ const SignUp = (props) => {
         backHandler()
       }else{
         console.log("vrethike")
+        onShowAlert('warning')
       }
     });
   };
@@ -106,6 +115,22 @@ const SignUp = (props) => {
   const backHandler = (event) => {
     props.onSignUp(false);
   };
+
+  function onCloseAlert() {
+    setAlert({
+      type: '',
+      text: '',
+      show: false
+    })
+  }
+
+  function onShowAlert(type) {
+    setAlert({
+      type: type,
+      text: 'Demo alert',
+      show: true
+    })
+  }
 
   return (
 
