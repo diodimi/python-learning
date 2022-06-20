@@ -18,7 +18,7 @@ function Navbar() {
           <Link to="#" className="menu-bars">
             <FaIcons.FaBars onClick={showSidebar} />
           </Link>
-          <div className="navbar_text">Admin</div>
+          <div className="navbar_text">Python e-learning</div>
         </div>
         <div className="nav">
         <nav className={sidebar ? "nav-menu active" : "nav-menu"}>

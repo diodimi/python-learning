@@ -9,7 +9,7 @@ import * as BsIcon from "react-icons/bs";
 export const SidebarData = [
   {
     title: 'Dashboard',
-    path: '/',
+    path: '/Home',
     icon: <MdIcons.MdSpaceDashboard />,
     cName: 'nav-text'
   },

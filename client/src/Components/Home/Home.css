@@ -1,3 +1,113 @@
-*{
-    color: aliceblue;
+.home{
+    color: black;
 }
+
+.container-2{
+    /* padding: 100px; */
+    border-radius: 12px;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
+    /* width: 30%; */
+    padding: 50px;
+    /* height: 100px; */
+    font-size: 30px;
+    text-align: center;
+}
+
+.container-1{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 40px;
+}
+
+.container-2:hover{
+    background-color: #FBCB0A;
+    cursor:pointer;
+}
+
+.learn-container{
+    border-radius: 12px;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
+    width: 40%;
+    padding: 50px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    /* height: 100px; */
+    font-size: 18px;
+    font-weight:500;
+    text-align: center;
+    margin: auto;
+    margin-top: 4%;
+}
+
+.code{
+    border-radius: 12px;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
+    
+}
+
+.arrows{
+    margin-top: 40px;
+    margin-bottom: 0px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    
+}
+
+.arrows:hover{
+    cursor:pointer;
+}
+
+.question-card ul {
+  list-style: none;
+}
+
+.question-card li {
+  margin-top: 8px;
+  background-color: darkgray;
+  padding: 16px;
+  border: 3px solid white;
+  border-radius: 20px;
+  font-size: 20px;
+}
+
+.question-card li:hover{
+    background-color:rgba(0, 0, 0, 0.25);
+    cursor:pointer;
+}
+
+.question-text {
+  color: darkblue;
+  font-size: 24px;
+}.final-results {
+    /* Center the div  */
+    margin: 0 auto;
+  
+    /* Dimensions  */
+    width: 50%; /* Can be in percentage also. */
+    height: auto;
+    margin-top: 64px;
+  
+    /* Visual  */
+    background-color: gray;
+    padding: 16px;
+    border-radius: 16px;
+    color: white;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px,
+      rgba(0, 0, 0, 0.3) 0px 18px 36px -18px;
+  }
+  
+  button {
+    background-color: red; /* Green */
+    border: none;
+    color: white;
+    padding: 16px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+  
+    border-radius: 24px;
+  }
