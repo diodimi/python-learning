@@ -4,9 +4,9 @@ import { a11yDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { GrLinkNext, GrLinkPrevious } from "react-icons/gr";
 import { CopyBlock, dracula } from "react-code-blocks";
 import { nord } from "react-syntax-highlighter/dist/esm/styles/prism";
+import Navbar from "../../Navbar/Navbar";
 
-
-export default function Begginer() {
+export default function Intermediate() {
   const [showResults, setShowResults] = useState(false);
   const [clicked, setClicked] = useState(false);
 
@@ -29,7 +29,7 @@ print(('not a is',not a))`.trim()
 b = False
 print(a and b or b)
    `.trim()
-
+const code=` print(('x > y is',x>y))`
   const explanations = [
     {
       title: "Arithmetic Operators",
@@ -58,7 +58,7 @@ print(a and b or b)
           For comparison operators we will compare the value of x to the value
           of y and print the result in true or false. Here in example, our value
           of x = 4 which is smaller than y = 5, so when we print the value as
-          x>y, it actually compares the value of x to y and since it is not
+          x{">"} y, it actually compares the value of x to y and since it is not
           correct, it returns false.
           <SyntaxHighlighter language="python" style={nord}>
             x = 4
@@ -67,7 +67,7 @@ print(a and b or b)
             y = 5
           </SyntaxHighlighter>
           <SyntaxHighlighter language="python" style={nord}>
-            print(('x > y is',x>y))
+           {code}
           </SyntaxHighlighter>
         </div>
       ),
@@ -200,6 +200,9 @@ print(a and b or b)
   };
 
   return (
+    <div>
+
+      <Navbar/>
     <div className="learn-container">
       {currentExplanation !== explanations.length && (
         <div>
@@ -255,5 +258,7 @@ print(a and b or b)
         </div>
       </div>
     </div>
+    </div>
+
   );
 }

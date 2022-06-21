@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import Container from "./Container/Container";
 import Beginner from "./Beginner/Begginer";
@@ -37,11 +38,15 @@ export default function Home() {
       <Navbar />
       {home && (
         <div className="container-1">
-          <div className="container-2" onClick={beginnerHandler}>
+          <Link to='/beginner' className="container-2">Basics</Link>
+          <Link to='/intermediate' className="container-2">Intermediate</Link>
+          <Link to='/advanced' className="container-2">Advanced</Link>
+
+          {/* <div className="container-2" onClick={beginnerHandler}>
             Basics
           </div>
           <div className="container-2" onClick={intermHandler}>Intermediate</div>
-          <div className="container-2" onClick={advancedHandler}>Advanced</div>
+          <div className="container-2" onClick={advancedHandler}>Advanced</div> */}
         </div>
       )}
 

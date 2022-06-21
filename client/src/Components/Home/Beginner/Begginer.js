@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { a11yDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { GrLinkNext, GrLinkPrevious } from "react-icons/gr";
-
+import Navbar from "../../Navbar/Navbar";
 export default function Begginer() {
   const [showResults, setShowResults] = useState(false);
   const [clicked, setClicked] = useState(false);
@@ -274,6 +274,10 @@ export default function Begginer() {
   };
 
   return (
+<div>
+
+<Navbar />
+
     <div className="learn-container">
       {currentExplanation !== explanations.length && (
         <div>
@@ -329,5 +333,7 @@ export default function Begginer() {
         </div>
       </div>
     </div>
+</div>
+
   );
 }

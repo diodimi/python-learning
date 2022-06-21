@@ -8,9 +8,9 @@ import * as BsIcon from "react-icons/bs";
 
 export const SidebarData = [
   {
-    title: 'Dashboard',
+    title: 'Home',
     path: '/Home',
-    icon: <MdIcons.MdSpaceDashboard />,
+    icon: <AiIcons.AiOutlineHome />,
     cName: 'nav-text'
   },
   {
@@ -19,12 +19,7 @@ export const SidebarData = [
     icon: <BsIcon.BsClipboardData />,
     cName: 'nav-text'
   },
-  {
-    title: 'Settings',
-    path: '/settings',
-    icon: <IoIcons.IoMdSettings />,
-    cName: 'nav-text'
-  },
+   
   // {
   //   title: 'Team',
   //   path: '/team',
@@ -38,7 +33,7 @@ export const SidebarData = [
   //   cName: 'nav-text'
   // },
   {
-    title: 'Support',
+    title: 'Help',
     path: '/support',
     icon: <IoIcons.IoMdHelpCircle />,
     cName: 'nav-text'
