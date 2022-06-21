@@ -4,6 +4,7 @@ import Card from "../../UI/Card/Card";
 import classes from "./Login.module.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
 
 import './Login.scss'
 
@@ -76,6 +77,8 @@ const Login = (props) => {
         const found = response.data.some((el) => el.email === enteredEmail);
         if(found){
           props.onLogin(true)
+          bake_cookie('email', enteredEmail);
+
           navigate('/Home');
         }else{
           console.log("No logged in")
