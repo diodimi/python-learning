@@ -6,6 +6,8 @@ import Home from './Components/Home/Home'
 import Begginer from './Components/Home/Beginner/Begginer';
 import Advanced from './Components/Home/Advanced/Advanced';
 import Intermediate from './Components/Home/iNTERMEDIATE/Intermediate';
+import Epanaliptiko from './Components/Home/Epanaliptiko/Epanaliptiko';
+import OnlineHelp from './Components/Home/OnlineHelp/onlineHelp';
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
         <Route exact path="/beginner" element={<Begginer/>}/>
         <Route exact path="/intermediate" element={<Intermediate/>}/>
         <Route exact path="/advanced" element={<Advanced/>}/>
+        <Route exact path="/sumup" element={<Epanaliptiko/>}/>
+        <Route exact path="/help" element={<OnlineHelp/>}/>
       </Routes>
     </BrowserRouter>
     </div>

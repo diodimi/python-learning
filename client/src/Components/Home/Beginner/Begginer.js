@@ -3,13 +3,163 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { a11yDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { GrLinkNext, GrLinkPrevious } from "react-icons/gr";
 import Navbar from "../../Navbar/Navbar";
+import { useEffect } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { bake_cookie, read_cookie, delete_cookie } from "sfcookies";
+
 export default function Begginer() {
   const [showResults, setShowResults] = useState(false);
-  const [clicked, setClicked] = useState(false);
+  const [tries, setTries] = useState();
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [currentExplanation, setCurrentExplanation] = useState(0);
   const [score, setScore] = useState(0);
+
+  const [questions, setQuestions] = useState([
+    {
+      text: "The correct way to print a string in Python 2",
+      options: [
+        { id: 0, text: 'print "Catching fish"', isCorrect: true },
+        { id: 1, text: "print Catching fish;", isCorrect: false },
+        { id: 2, text: "print #Catching fish", isCorrect: false },
+      ],
+    },
+    {
+      text: "score=0. How do you change score by 2",
+      options: [
+        { id: 0, text: "score-=2", isCorrect: false },
+        { id: 1, text: "score2", isCorrect: false },
+        { id: 2, text: "score=2", isCorrect: true },
+      ],
+    },
+    {
+      text: "The correct way to comment a word",
+      options: [
+        { id: 0, text: "#comment", isCorrect: true },
+        { id: 1, text: "//comment", isCorrect: false },
+        { id: 2, text: "@comment", isCorrect: false },
+      ],
+    },
+    {
+      text: "The correct way to set true a boolean variable",
+      options: [
+        { id: 0, text: "varTrue", isCorrect: false },
+        { id: 1, text: "var=true", isCorrect: true },
+        { id: 2, text: "var(true)", isCorrect: false },
+      ],
+    },
+    {
+      text: "How to use the modulo operator to find the remainder of 15 divided by 2?",
+      options: [
+        { id: 0, text: "15/2", isCorrect: false },
+        { id: 1, text: "15%2", isCorrect: true },
+        { id: 2, text: "15@2", isCorrect: false },
+      ],
+    },
+  ]);
+  const testCode = `#print "Hi"
+print "Dionisis"
+   `.trim();
+  const testCode2 = `var=2
+var=var+4 
+var=3
+print var
+   `.trim();
+  var extraQuestions = [
+    {
+      text: "The correct way to print a string in Python 2",
+      options: [
+        { id: 0, text: 'print "Catching fish"', isCorrect: true },
+        { id: 1, text: "print Catching fish;", isCorrect: false },
+        { id: 2, text: "print #Catching fish", isCorrect: false },
+      ],
+    },
+    {
+      text: "score=0. How do you change score by 2",
+      options: [
+        { id: 0, text: "score-=2", isCorrect: false },
+        { id: 1, text: "score2", isCorrect: false },
+        { id: 2, text: "score=2", isCorrect: true },
+      ],
+    },
+    {
+      text: "The correct way to comment a word",
+      options: [
+        { id: 0, text: "#comment", isCorrect: true },
+        { id: 1, text: "//comment", isCorrect: false },
+        { id: 2, text: "@comment", isCorrect: false },
+      ],
+    },
+    {
+      text: "The correct way to set true a boolean variable",
+      options: [
+        { id: 0, text: "varTrue", isCorrect: false },
+        { id: 1, text: "var=true", isCorrect: true },
+        { id: 2, text: "var(true)", isCorrect: false },
+      ],
+    },
+    {
+      text: "How to use the modulo operator to find the remainder of 15 divided by 2?",
+      options: [
+        { id: 0, text: "15/2", isCorrect: false },
+        { id: 1, text: "15%2", isCorrect: true },
+        { id: 2, text: "15@2", isCorrect: false },
+      ],
+    },
+    {
+      text: (
+        <div>
+          What is the output of below code?
+          <SyntaxHighlighter language="python" style={a11yDark}>
+            {testCode}
+          </SyntaxHighlighter>
+        </div>
+      ),
+      options: [
+        { id: 0, text: "Hi", isCorrect: false },
+
+        { id: 1, text: "Dionisis", isCorrect: true },
+        { id: 2, text: "Hi Dionisis", isCorrect: false },
+      ],
+    },
+    {
+      text: (
+        <div>
+          What is the output of below code?
+          <SyntaxHighlighter language="python" style={a11yDark}>
+            {testCode2}
+          </SyntaxHighlighter>
+        </div>
+      ),
+      options: [
+        { id: 0, text: "2", isCorrect: false },
+        { id: 1, text: "6", isCorrect: false },
+        { id: 2, text: "3", isCorrect: true },
+      ],
+    },
+  ];
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/test/get", {
+        params: {
+          email: read_cookie("email"),
+          test: "beginner_test",
+        },
+      })
+      .then((res) => {
+        console.log("ok");
+        setTries(res.data[0].beginner_test);
+
+        console.log(tries);
+        if (tries > 2) {
+          console.log(questions);
+          setQuestions(extraQuestions);
+          console.log(extraQuestions);
+        }
+      });
+  }, [tries]);
 
   const explanations = [
     {
@@ -197,49 +347,6 @@ export default function Begginer() {
     },
   ];
 
-  const questions = [
-    {
-      text: "The correct way to print a string in Python 2",
-      options: [
-        { id: 0, text: 'print "Catching fish"', isCorrect: true },
-        { id: 1, text: "print Catching fish;", isCorrect: false },
-        { id: 2, text: "print #Catching fish", isCorrect: false },
-      ],
-    },
-    {
-      text: "score=0. How do you change score by 2",
-      options: [
-        { id: 0, text: "score-=2", isCorrect: false },
-        { id: 1, text: "score2", isCorrect: false },
-        { id: 2, text: "score=2", isCorrect: true },
-      ],
-    },
-    {
-      text: "The correct way to comment a word",
-      options: [
-        { id: 0, text: "#comment", isCorrect: true },
-        { id: 1, text: "//comment", isCorrect: false },
-        { id: 2, text: "@comment", isCorrect: false },
-      ],
-    },
-    {
-      text: "The correct way to set true a boolean variable",
-      options: [
-        { id: 0, text: "varTrue", isCorrect: false },
-        { id: 1, text: "var=true", isCorrect: true },
-        { id: 2, text: "var(true)", isCorrect: false },
-      ],
-    },
-    {
-      text: "How to use the modulo operator to find the remainder of 15 divided by 2?",
-      options: [
-        { id: 0, text: "15/2", isCorrect: false },
-        { id: 1, text: "15%2", isCorrect: true },
-        { id: 2, text: "15@2", isCorrect: false },
-      ],
-    },
-  ];
-
   function previousHandler() {
     if (currentExplanation !== explanations.length) {
       setCurrentExplanation(currentExplanation - 1);
@@ -261,79 +368,108 @@ export default function Begginer() {
     if (isCorrect) {
       setScore(score + 1);
     }
-    if (currentQuestion === questions.length-1) {
+    if (currentQuestion === questions.length - 1) {
+      console.log(score, questions.length);
+      if (score + 1 === questions.length) {
+        console.log(score, questions.length);
+        bake_cookie("beginner_passed", 1);
+
+        axios.patch("http://localhost:3001/test/update2", {
+          email: read_cookie("email"),
+          test: "beginner_test",
+        });
+        
+        axios.patch("http://localhost:3001/passed/update", {
+          email: read_cookie("email"),
+          pass: "beginner_passed",
+        });
+      }
       setShowResults(true);
     }
     setCurrentQuestion(currentQuestion + 1);
-
   };
   const restartGame = () => {
+    axios.patch("http://localhost:3001/test/update", {
+      email: read_cookie("email"),
+      test: "beginner_test",
+    });
+
+    setTries(tries + 1);
+    if (tries > 2) {
+      setQuestions(extraQuestions);
+    }
+    console.log(questions.length);
     setScore(0);
     setCurrentQuestion(0);
     setShowResults(false);
+    setCurrentExplanation(0);
   };
 
   return (
-<div>
+    <div>
+      <Navbar />
 
-<Navbar />
+      <div className="learn-container">
+        {currentExplanation !== explanations.length && (
+          <div>
+            <h2>{explanations[currentExplanation].title}</h2>
+            <div>{explanations[currentExplanation].text}</div>
+          </div>
+        )}
+        {currentExplanation === explanations.length && !showResults && (
+          <div className="question-card">
+            {/* Current Question  */}
+            <h2>
+              Question: {currentQuestion + 1} out of {questions.length}
+            </h2>
+            <h3 className="question-text">{questions[currentQuestion].text}</h3>
 
-    <div className="learn-container">
-      {currentExplanation !== explanations.length && (
-        <div>
-          <h2>{explanations[currentExplanation].title}</h2>
-          <div>{explanations[currentExplanation].text}</div>
-        </div>
-      )}
-      {currentExplanation === explanations.length && !showResults && (
-        <div className="question-card">
-          {/* Current Question  */}
-          <h2>
-            Question: {currentQuestion + 1} out of {questions.length}
-          </h2>
-          <h3 className="question-text">{questions[currentQuestion].text}</h3>
-
-          {/* List of possible answers  */}
-          <ul>
-            {questions[currentQuestion].options.map((option) => {
-              return (
-                <li
-                  key={option.id}
-                  onClick={() => optionClicked(option.isCorrect)}
-                >
-                  {option.text}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      )}
-      {showResults && (
-        /* 4. Final Results */
-        <div className="final-results">
-          <h1>Final Results</h1>
-          <h2>
-            {score} out of {questions.length} correct - (
-            {(score / questions.length) * 100}%)
-          </h2>
-          <button onClick={() => restartGame()}>Restart game</button>
-        </div>
-      )}
-      <div className="arrows">
-        <div>
-          {currentExplanation !== 0 &&
-            currentExplanation !== explanations.length && (
-              <GrLinkPrevious onClick={previousHandler} />
+            {/* List of possible answers  */}
+            <ul>
+              {questions[currentQuestion].options.map((option) => {
+                return (
+                  <li
+                    key={option.id}
+                    onClick={() => optionClicked(option.isCorrect)}
+                  >
+                    {option.text}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
+        {showResults && (
+          /* 4. Final Results */
+          <div className="final-results">
+            <h1>Final Results</h1>
+            <h2>
+              {score} out of {questions.length} correct - (
+              {((score / questions.length) * 100).toFixed(2)}%)
+            </h2>
+            {score === questions.length ? (
+              <Link to="/home" className="papa">
+                Home
+              </Link>
+            ) : (
+              <button onClick={() => restartGame()}>Restart game</button>
             )}
-        </div>
-        <div>
-          {currentExplanation !== explanations.length && (
-            <GrLinkNext onClick={nextHandler} />
-          )}
+          </div>
+        )}
+        <div className="arrows">
+          <div>
+            {currentExplanation !== 0 &&
+              currentExplanation !== explanations.length && (
+                <GrLinkPrevious onClick={previousHandler} />
+              )}
+          </div>
+          <div>
+            {currentExplanation !== explanations.length && (
+              <GrLinkNext onClick={nextHandler} />
+            )}
+          </div>
         </div>
       </div>
     </div>
-</div>
-
   );
 }

@@ -73,9 +73,32 @@ const Login = (props) => {
           email: enteredEmail,
           password: enteredPassword,
         }).then((response)=>{
-        console.log(response.data)
+        
         const found = response.data.some((el) => el.email === enteredEmail);
+        
         if(found){
+          axios.post("http://localhost:3001/passed/get",{
+          email: enteredEmail,
+            pass:"beginner_passed"
+          }).then((res)=>{
+            bake_cookie("beginner_passed",res.data[0].beginner_passed)
+          })
+          axios.post("http://localhost:3001/passed/get",{
+          email: enteredEmail,
+            pass:"intetm_passed"
+          }).then((res)=>{
+            
+            bake_cookie("interm_passed",res.data[0].intetm_passed)
+          })
+          axios.post("http://localhost:3001/passed/get",{
+          email: enteredEmail,
+            pass:"advanced_passed"
+          }).then((res)=>{
+            
+            bake_cookie("advanced_passed",res.data[0].advanced_passed)
+          })
+
+          console.log('found')
           props.onLogin(true)
           bake_cookie('email', enteredEmail);
 

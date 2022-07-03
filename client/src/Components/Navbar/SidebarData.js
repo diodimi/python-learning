@@ -13,12 +13,12 @@ export const SidebarData = [
     icon: <AiIcons.AiOutlineHome />,
     cName: 'nav-text'
   },
-  {
-    title: 'Data',
-    path: '/reports',
-    icon: <BsIcon.BsClipboardData />,
-    cName: 'nav-text'
-  },
+  // {
+  //   title: 'Data',
+  //   path: '/reports',
+  //   icon: <BsIcon.BsClipboardData />,
+  //   cName: 'nav-text'
+  // },
    
   // {
   //   title: 'Team',
@@ -34,7 +34,7 @@ export const SidebarData = [
   // },
   {
     title: 'Help',
-    path: '/support',
+    path: '/help',
     icon: <IoIcons.IoMdHelpCircle />,
     cName: 'nav-text'
   },{

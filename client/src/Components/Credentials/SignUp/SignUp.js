@@ -104,6 +104,11 @@ const SignUp = (props) => {
           email: enteredEmail,
           password: enteredPassword,
         });
+        Axios.post("http://localhost:3001/visits/post", {
+          
+          email: enteredEmail,
+         
+        });
         backHandler()
       }else{
         console.log("vrethike")

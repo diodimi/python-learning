@@ -1,18 +1,188 @@
-import React, { useState } from "react";
+import React, {useEffect, useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { a11yDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { GrLinkNext, GrLinkPrevious } from "react-icons/gr";
 import { CopyBlock, dracula } from "react-code-blocks";
 import { nord } from "react-syntax-highlighter/dist/esm/styles/prism";
 import Navbar from "../../Navbar/Navbar";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
 
 export default function Intermediate() {
   const [showResults, setShowResults] = useState(false);
   const [clicked, setClicked] = useState(false);
+  const [tries, setTries] = useState();
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [currentExplanation, setCurrentExplanation] = useState(0);
   const [score, setScore] = useState(0);
+  const testC=
+  `a = True
+b = False
+print(a and b or b)
+   `.trim()
+const code=` print(('x > y is',x>y))`
+  const [questions, setQuestions] = useState([
+    {
+      text: "What is the output of True and False",
+      options: [
+        { id: 0, text: 'True', isCorrect: false },
+        { id: 1, text: "False", isCorrect: true },
+        { id: 2, text: "I don't know", isCorrect: false },
+      ],
+    },
+    {
+      text: "What is the output of True or False",
+      options: [
+        { id: 0, text: 'True', isCorrect: true },
+        { id: 1, text: "False", isCorrect: false },
+        { id: 2, text: "I don't know", isCorrect: false },
+      ],
+    },
+    {
+      text: "What is the output of 10<=10",
+      options: [
+        { id: 0, text: 'True', isCorrect: true },
+        { id: 1, text: "False", isCorrect: false },
+        { id: 2, text: "I don't know", isCorrect: false },
+      ],
+    },
+    {
+      text: "What is the output of 5>=10",
+      options: [
+        { id: 0, text: 'True', isCorrect: false },
+        { id: 1, text: "False", isCorrect: true },
+        { id: 2, text: "I don't know", isCorrect: false },
+      ],
+    },
+    {
+      text: <div>what is the output of below code 
+        <SyntaxHighlighter language="python" style={nord}>
+            {testC}
+          </SyntaxHighlighter>
+
+      </div>,
+      options: [
+        { id: 0, text: 'True', isCorrect: false },
+        { id: 1, text: "False", isCorrect: true },
+        { id: 2, text: "I don't know", isCorrect: false },
+      ],
+    },
+  ]);
+  const testC2=
+  `a=4
+a+=2
+print(a)
+   `.trim()
+   const testC3=
+  `a=4
+a+=2
+b=10
+print(b<=a)
+   `.trim()
+  const extraQuestions=[
+    {
+      text: "What is the output of True and False",
+      options: [
+        { id: 0, text: 'True', isCorrect: false },
+        { id: 1, text: "False", isCorrect: true },
+        { id: 2, text: "I don't know", isCorrect: false },
+      ],
+    },
+    {
+      text: "What is the output of True or False",
+      options: [
+        { id: 0, text: 'True', isCorrect: true },
+        { id: 1, text: "False", isCorrect: false },
+        { id: 2, text: "I don't know", isCorrect: false },
+      ],
+    },
+    {
+      text: "What is the output of 10<=10",
+      options: [
+        { id: 0, text: 'True', isCorrect: true },
+        { id: 1, text: "False", isCorrect: false },
+        { id: 2, text: "I don't know", isCorrect: false },
+      ],
+    },
+    {
+      text: "What is the output of 5>=10",
+      options: [
+        { id: 0, text: 'True', isCorrect: false },
+        { id: 1, text: "False", isCorrect: true },
+        { id: 2, text: "I don't know", isCorrect: false },
+      ],
+    },
+    {
+      text: <div>what is the output of below code 
+        <SyntaxHighlighter language="python" style={nord}>
+            {testC}
+          </SyntaxHighlighter>
+
+      </div>,
+      options: [
+        { id: 0, text: 'True', isCorrect: false },
+        { id: 1, text: "False", isCorrect: true },
+        { id: 2, text: "I don't know", isCorrect: false },
+      ],
+    },
+    {
+      text:<div> What is the output of this code?
+<SyntaxHighlighter language="python" style={nord}>
+            {testC2}
+          </SyntaxHighlighter>
+
+      </div>,
+      options: [
+        { id: 0, text: '4', isCorrect: false },
+        { id: 1, text: "6", isCorrect: true },
+        { id: 2, text: "2", isCorrect: false },
+      ],
+    },
+    {
+      text:<div> What is the output of this code?
+      <SyntaxHighlighter language="python" style={nord}>
+                  {testC3}
+                </SyntaxHighlighter>
+      
+            </div>,
+      options: [
+        { id: 0, text: 'True', isCorrect: false },
+        { id: 1, text: "False", isCorrect: true },
+        { id: 2, text: "I don't know", isCorrect: false },
+      ],
+    }
+  ]
+
+  
+  useEffect(() => {
+    
+     
+    axios
+      .get("http://localhost:3001/test/get", {
+        params:{
+        email: read_cookie("email"),
+        test: "interm_test",
+        }
+      })
+      .then((res) => {
+        console.log("ok")
+        setTries(res.data[0].interm_test);
+
+        
+        console.log(tries)
+        if (tries > 2) {
+          console.log(questions);
+          setQuestions(extraQuestions);
+          console.log(extraQuestions);
+        }
+
+      })
+   
+     
+  }, [tries]);
+
   const operators = "( ==, != , <>, >,<=, etc.)";
   const arithmeticCODE = 
 ` x= 4
@@ -24,12 +194,7 @@ b = False
 print(('a and b is',a and b))
 print(('a or b is',a or b))
 print(('not a is',not a))`.trim()
-  const testCode=
-  `a = True
-b = False
-print(a and b or b)
-   `.trim()
-const code=` print(('x > y is',x>y))`
+
   const explanations = [
     {
       title: "Arithmetic Operators",
@@ -119,53 +284,7 @@ const code=` print(('x > y is',x>y))`
     
   ];
 
-  const questions = [
-    {
-      text: "What is the output of True and False",
-      options: [
-        { id: 0, text: 'True', isCorrect: false },
-        { id: 1, text: "False", isCorrect: true },
-        { id: 2, text: "I don't know", isCorrect: false },
-      ],
-    },
-    {
-      text: "What is the output of True or False",
-      options: [
-        { id: 0, text: 'True', isCorrect: true },
-        { id: 1, text: "False", isCorrect: false },
-        { id: 2, text: "I don't know", isCorrect: false },
-      ],
-    },
-    {
-      text: "What is the output of 10<=10",
-      options: [
-        { id: 0, text: 'True', isCorrect: true },
-        { id: 1, text: "False", isCorrect: false },
-        { id: 2, text: "I don't know", isCorrect: false },
-      ],
-    },
-    {
-      text: "What is the output of 5>=10",
-      options: [
-        { id: 0, text: 'True', isCorrect: false },
-        { id: 1, text: "False", isCorrect: true },
-        { id: 2, text: "I don't know", isCorrect: false },
-      ],
-    },
-    {
-      text: <div>what is the output of below code 
-        <SyntaxHighlighter language="python" style={nord}>
-            {testCode}
-          </SyntaxHighlighter>
-
-      </div>,
-      options: [
-        { id: 0, text: 'True', isCorrect: false },
-        { id: 1, text: "False", isCorrect: true },
-        { id: 2, text: "I don't know", isCorrect: false },
-      ],
-    },
-  ];
+  
 
   function previousHandler() {
     if (currentExplanation !== explanations.length) {
@@ -189,14 +308,40 @@ const code=` print(('x > y is',x>y))`
       setScore(score + 1);
     }
     if (currentQuestion === questions.length - 1) {
+      console.log(score,questions.length)
+      if(score+1 === questions.length){
+        console.log(score,questions.length)
+    bake_cookie('interm_passed',1)
+
+    axios.patch("http://localhost:3001/test/update2", {
+      email: read_cookie("email"),
+      test: "interm_test",
+    });
+
+        axios.patch("http://localhost:3001/passed/update", {
+      email: read_cookie("email"),
+      pass: "intetm_passed",
+    });
+      }
       setShowResults(true);
     }
     setCurrentQuestion(currentQuestion + 1);
   };
   const restartGame = () => {
+    axios.patch("http://localhost:3001/test/update", {
+      email: read_cookie("email"),
+      test: "interm_test",
+    });
+    setTries(tries + 1);
+    if (tries > 2) {
+      setQuestions(extraQuestions);
+    }
+    console.log(questions.length);
     setScore(0);
     setCurrentQuestion(0);
     setShowResults(false);
+    setCurrentExplanation(0)
+
   };
 
   return (
@@ -239,9 +384,15 @@ const code=` print(('x > y is',x>y))`
           <h1>Final Results</h1>
           <h2>
             {score} out of {questions.length} correct - (
-            {(score / questions.length) * 100}%)
+            {((score / questions.length) * 100).toFixed(2)}%)
           </h2>
-          <button onClick={() => restartGame()}>Restart game</button>
+          {score === questions.length ? (
+              <Link to="/home" className="papa">
+                Home
+              </Link>
+            ) : (
+              <button onClick={() => restartGame()}>Restart game</button>
+            )}
         </div>
       )}
       <div className="arrows">

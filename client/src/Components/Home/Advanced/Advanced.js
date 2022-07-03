@@ -1,22 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { a11yDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { GrLinkNext, GrLinkPrevious } from "react-icons/gr";
 import { CopyBlock, dracula } from "react-code-blocks";
 import { nord } from "react-syntax-highlighter/dist/esm/styles/prism";
 import Navbar from "../../Navbar/Navbar";
+import axios from "axios";
+import { bake_cookie, read_cookie, delete_cookie } from "sfcookies";
+import { Link } from "react-router-dom";
 
 export default function Advanced() {
   const [showResults, setShowResults] = useState(false);
   const [clicked, setClicked] = useState(false);
+  const [tries, setTries] = useState();
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [currentExplanation, setCurrentExplanation] = useState(0);
   const [score, setScore] = useState(0);
-  const operators = "( ==, != , <>, >,<=, etc.)";
-  const arithmeticCODE = ` x= 4
-  y= 5
-  print(x + y)`;
+
   const logicalCode = `def my_function():
    print("Hello from a function")
   `.trim();
@@ -83,6 +84,242 @@ if (a + b)==17:
 else:
   print('False')
 `.trim();
+  const testCode5 = `a=true
+b=false
+if (a and b)==true:
+    print('True')
+else:
+  print('False')
+`.trim();
+  const testCode6 = `def fun(a,b):
+  return b-a
+
+a=1
+b=4
+print(fun(a+b,a))
+
+
+`.trim();
+  const testCode7 = `num=[1,2,3,4]
+num=num[0]+num[2]
+print(num)
+`.trim();
+  const [questions, setQuestions] = useState([
+    {
+      text: "How to call a function",
+      options: [
+        { id: 0, text: "function_name()", isCorrect: true },
+        { id: 1, text: "function_name", isCorrect: false },
+        { id: 2, text: "()function_name()", isCorrect: false },
+      ],
+    },
+    {
+      text: (
+        <div>
+          {" "}
+          What is the output of the following function call
+          <SyntaxHighlighter language="python" style={nord}>
+            {testCode}
+          </SyntaxHighlighter>
+        </div>
+      ),
+      options: [
+        { id: 0, text: "Emma 25", isCorrect: true },
+        { id: 1, text: "Emma25", isCorrect: false },
+        { id: 2, text: "25Emma", isCorrect: false },
+      ],
+    },
+
+    {
+      text: (
+        <div>
+          What will the following program print
+          <SyntaxHighlighter language="python" style={nord}>
+            {testCode2}
+          </SyntaxHighlighter>
+        </div>
+      ),
+      options: [
+        { id: 0, text: "21", isCorrect: true },
+        { id: 1, text: "5", isCorrect: false },
+        { id: 2, text: "18", isCorrect: false },
+      ],
+    },
+    {
+      text: (
+        <div>
+          What will the following program print
+          <SyntaxHighlighter language="python" style={nord}>
+            {testCode3}
+          </SyntaxHighlighter>
+        </div>
+      ),
+      options: [
+        { id: 0, text: "Harsh", isCorrect: false },
+        { id: 1, text: "Pratik", isCorrect: true },
+        { id: 2, text: "Bob", isCorrect: false },
+      ],
+    },
+    {
+      text: (
+        <div>
+          What is the output of below code
+          <SyntaxHighlighter language="python" style={nord}>
+            {testCode4}
+          </SyntaxHighlighter>
+        </div>
+      ),
+      options: [
+        { id: 0, text: "True", isCorrect: true },
+        { id: 1, text: "False", isCorrect: false },
+        { id: 2, text: "I don't know", isCorrect: false },
+      ],
+    },
+  ]);
+
+  const extraQuestions = [
+    {
+      text: "How to call a function",
+      options: [
+        { id: 0, text: "function_name()", isCorrect: true },
+        { id: 1, text: "function_name", isCorrect: false },
+        { id: 2, text: "()function_name()", isCorrect: false },
+      ],
+    },
+    {
+      text: (
+        <div>
+          {" "}
+          What is the output of the following function call
+          <SyntaxHighlighter language="python" style={nord}>
+            {testCode}
+          </SyntaxHighlighter>
+        </div>
+      ),
+      options: [
+        { id: 0, text: "Emma 25", isCorrect: true },
+        { id: 1, text: "Emma25", isCorrect: false },
+        { id: 2, text: "25Emma", isCorrect: false },
+      ],
+    },
+
+    {
+      text: (
+        <div>
+          What will the following program print
+          <SyntaxHighlighter language="python" style={nord}>
+            {testCode2}
+          </SyntaxHighlighter>
+        </div>
+      ),
+      options: [
+        { id: 0, text: "21", isCorrect: true },
+        { id: 1, text: "5", isCorrect: false },
+        { id: 2, text: "18", isCorrect: false },
+      ],
+    },
+    {
+      text: (
+        <div>
+          What will the following program print
+          <SyntaxHighlighter language="python" style={nord}>
+            {testCode3}
+          </SyntaxHighlighter>
+        </div>
+      ),
+      options: [
+        { id: 0, text: "Harsh", isCorrect: false },
+        { id: 1, text: "Pratik", isCorrect: true },
+        { id: 2, text: "Bob", isCorrect: false },
+      ],
+    },
+    {
+      text: (
+        <div>
+          What is the output of below code
+          <SyntaxHighlighter language="python" style={nord}>
+            {testCode4}
+          </SyntaxHighlighter>
+        </div>
+      ),
+      options: [
+        { id: 0, text: "True", isCorrect: true },
+        { id: 1, text: "False", isCorrect: false },
+        { id: 2, text: "I don't know", isCorrect: false },
+      ],
+    },
+    {
+      text: (
+        <div>
+          What is the output of below code
+          <SyntaxHighlighter language="python" style={nord}>
+            {testCode5}
+          </SyntaxHighlighter>
+        </div>
+      ),
+      options: [
+        { id: 0, text: "True", isCorrect: false },
+        { id: 1, text: "False", isCorrect: true },
+        { id: 2, text: "I don't know", isCorrect: false },
+      ],
+    },
+    {
+      text: (
+        <div>
+          What is the output of below code
+          <SyntaxHighlighter language="python" style={nord}>
+            {testCode6}
+          </SyntaxHighlighter>
+        </div>
+      ),
+      options: [
+        { id: 0, text: "1", isCorrect: false },
+        { id: 1, text: "-4", isCorrect: true },
+        { id: 2, text: "5", isCorrect: false },
+      ],
+    },
+    {
+      text: (
+        <div>
+          What is the output of below code
+          <SyntaxHighlighter language="python" style={nord}>
+            {testCode7}
+          </SyntaxHighlighter>
+        </div>
+      ),
+      options: [
+        { id: 0, text: "1", isCorrect: false },
+        { id: 1, text: "5", isCorrect: true },
+        { id: 2, text: "4", isCorrect: false },
+      ],
+    },
+  ];
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/test/get", {
+        params: {
+          email: read_cookie("email"),
+          test: "advanced_test",
+        },
+      })
+      .then((res) => {
+        console.log("ok");
+        setTries(res.data[0].advanced_test);
+
+        console.log(tries);
+        if (tries > 2) {
+          console.log(questions);
+          setQuestions(extraQuestions);
+          console.log(extraQuestions);
+        }
+      });
+  }, [tries]);
+
+  const operators = "( ==, != , <>, >,<=, etc.)";
+  const arithmeticCODE = ` x= 4
+  y= 5
+  print(x + y)`;
 
   const explanations = [
     {
@@ -186,80 +423,6 @@ else:
     { title: "It's Testing time!", text: "Let's Start" },
   ];
 
-  const questions = [
-    {
-      text: "How to call a function",
-      options: [
-        { id: 0, text: "function_name()", isCorrect: true },
-        { id: 1, text: "function_name", isCorrect: false },
-        { id: 2, text: "()function_name()", isCorrect: false },
-      ],
-    },
-    {
-      text: (
-        <div>
-          {" "}
-          What is the output of the following function call
-          <SyntaxHighlighter language="python" style={nord}>
-            {testCode}
-          </SyntaxHighlighter>
-        </div>
-      ),
-      options: [
-        { id: 0, text: "Emma 25", isCorrect: true },
-        { id: 1, text: "Emma25", isCorrect: false },
-        { id: 2, text: "25Emma", isCorrect: false },
-      ],
-    },
-
-    {
-      text: (
-        <div>
-          What will the following program print
-          <SyntaxHighlighter language="python" style={nord}>
-            {testCode2}
-          </SyntaxHighlighter>
-        </div>
-      ),
-      options: [
-        { id: 0, text: "21", isCorrect: true },
-        { id: 1, text: "5", isCorrect: false },
-        { id: 2, text: "18", isCorrect: false },
-      ],
-    },
-    {
-      text: (
-        <div>
-          What will the following program print
-          <SyntaxHighlighter language="python" style={nord}>
-            {testCode3}
-          </SyntaxHighlighter>
-        </div>
-      ),
-      options: [
-        { id: 0, text: "Harsh", isCorrect: false },
-        { id: 1, text: "Pratik", isCorrect: true },
-        { id: 2, text: "Bob", isCorrect: false },
-      ],
-    },
-    {
-      text: (
-        <div>
-         What is the output of below code
-          <SyntaxHighlighter language="python" style={nord}>
-            {testCode4}
-          </SyntaxHighlighter>
-        </div>
-      ),
-      options: [
-        { id: 0, text: "True", isCorrect: true },
-        { id: 1, text: "False", isCorrect: false },
-        { id: 2, text: "I don't know", isCorrect: false },
-      ],
-    },
-    
-  ];
-
   function previousHandler() {
     if (currentExplanation !== explanations.length) {
       setCurrentExplanation(currentExplanation - 1);
@@ -282,76 +445,108 @@ else:
       setScore(score + 1);
     }
     if (currentQuestion === questions.length - 1) {
+      console.log(score,questions.length)
+      if(score+1 === questions.length){
+        console.log(score,questions.length)
+    bake_cookie('advanced_passed',1)
+    axios.patch("http://localhost:3001/test/update2", {
+      email: read_cookie("email"),
+      test: "advanced_test",
+    });
+        axios.patch("http://localhost:3001/passed/update", {
+      email: read_cookie("email"),
+      pass: "advanced_passed",
+    });
+      }
       setShowResults(true);
     }
     setCurrentQuestion(currentQuestion + 1);
   };
   const restartGame = () => {
+    axios.patch("http://localhost:3001/test/update", {
+      email: read_cookie("email"),
+      test: "advanced_test",
+    });
+
+    setTries(tries + 1);
+    if (tries > 2) {
+      setQuestions(extraQuestions);
+    }
     setScore(0);
     setCurrentQuestion(0);
     setShowResults(false);
+    setCurrentExplanation(0);
   };
 
   return (
     <div>
-      <Navbar/>
-    <div className="learn-container">
-      {currentExplanation !== explanations.length && (
-        <div>
-          <h2>{explanations[currentExplanation].title}</h2>
-          <div>{explanations[currentExplanation].text}</div>
-        </div>
-      )}
-      {currentExplanation === explanations.length && !showResults && (
-        <div className="question-card">
-          {/* Current Question  */}
-          <h2>
-            Question: {currentQuestion + 1} out of {questions.length}
-          </h2>
-          <h3 className="question-text">{questions[currentQuestion].text}</h3>
+      <Navbar />
+      <div className="learn-container">
+        {currentExplanation !== explanations.length && (
+          <div>
+            <h2>{explanations[currentExplanation].title}</h2>
+            <div>{explanations[currentExplanation].text}</div>
+          </div>
+        )}
+        {currentExplanation === explanations.length && !showResults && (
+          <div className="question-card">
+            {/* Current Question  */}
+            <h2>
+              Question: {currentQuestion + 1} out of {questions.length}
+            </h2>
+            <h3 className="question-text">{questions[currentQuestion].text}</h3>
 
-          {/* List of possible answers  */}
-          <ul>
-            {questions[currentQuestion].options.map((option) => {
-              return (
-                <li
-                  key={option.id}
-                  onClick={() => optionClicked(option.isCorrect)}
-                >
-                  {option.text}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      )}
-      {showResults && (
-        /* 4. Final Results */
-        <div className="final-results">
-          <h1>Final Results</h1>
-          <h2>
-            {score===questions.length ? <div>You passed!</div>:<div>Try again!</div> }
-            {score} out of {questions.length} correct - (
-            {(score / questions.length) * 100}%)
-          </h2>
-          {score!==questions.length && <button onClick={() => restartGame()}>Restart game</button>}
-        </div>
-      )}
-      <div className="arrows">
-        <div>
-          {currentExplanation !== 0 &&
-            currentExplanation !== explanations.length && (
-              <GrLinkPrevious onClick={previousHandler} />
+            {/* List of possible answers  */}
+            <ul>
+              {questions[currentQuestion].options.map((option) => {
+                return (
+                  <li
+                    key={option.id}
+                    onClick={() => optionClicked(option.isCorrect)}
+                  >
+                    {option.text}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
+        {showResults && (
+          /* 4. Final Results */
+          <div className="final-results">
+            <h1>Final Results</h1>
+            <h2>
+              {score === questions.length ? (
+                <div>You passed!</div>
+              ) : (
+                <div>Try again!</div>
+              )}
+              {score} out of {questions.length} correct - (
+              {((score / questions.length) * 100).toFixed(2)}%)
+            </h2>
+            {score === questions.length ? (
+              <Link to="/home" className="papa">
+                Home
+              </Link>
+            ) : (
+              <button onClick={() => restartGame()}>Restart game</button>
             )}
-        </div>
-        <div>
-          {currentExplanation !== explanations.length && (
-            <GrLinkNext onClick={nextHandler} />
-          )}
+          </div>
+        )}
+        <div className="arrows">
+          <div>
+            {currentExplanation !== 0 &&
+              currentExplanation !== explanations.length && (
+                <GrLinkPrevious onClick={previousHandler} />
+              )}
+          </div>
+          <div>
+            {currentExplanation !== explanations.length && (
+              <GrLinkNext onClick={nextHandler} />
+            )}
+          </div>
         </div>
       </div>
     </div>
-    </div>
-
   );
 }

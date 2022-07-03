@@ -9,39 +9,59 @@ import "./Home.css";
 import { useNavigate } from "react-router-dom";
 
 import Navbar from "../Navbar/Navbar";
+import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
+import axios from "axios";
 
 export default function Home() {
   const [home, setHome] = useState(true);
-  const [beginner, setBeginner] = useState(false);
-  const [interm, setInterm] = useState(false);
-  const [advanced, setAdvanced] = useState(false);
+  const [beginner_passed, setBeginner] = useState();
+  const [interm_passed, setInterm] = useState();
+  const [advanced_passed, setAdvanced] = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
-    setHome(!beginner && !advanced && !interm);
-  }, [beginner, interm, advanced]);
+    setBeginner(read_cookie("beginner_passed"))
+    setInterm(read_cookie('interm_passed'))
+    setAdvanced(read_cookie('advanced_passed'))
 
-  function beginnerHandler(state) {
-    setBeginner(true);
-  }
+  }, []);
 
-  function intermHandler(state) {
-    setInterm(true);
-  }
+function beginnerHandler(){
+  axios.patch("http://localhost:3001/visits/update",{
+    email:read_cookie('email'),
+    visit:"beggginer_visits"
+  })
+}
 
-  function advancedHandler(state) {
-    setAdvanced(true);
-  }
+function intermHandler(){
+  axios.patch("http://localhost:3001/visits/update",{
+    email:read_cookie('email'),
+    visit:"interm_visits"
+  })
+}
+function advancedHandler(){
+  axios.patch("http://localhost:3001/visits/update",{
+    email:read_cookie('email'),
+    visit:"advanced_visits"
+  })
+}
 
   return (
     <div className="home">
       <Navbar />
       {home && (
         <div className="container-1">
-          <Link to='/beginner' className="container-2">Basics</Link>
-          <Link to='/intermediate' className="container-2">Intermediate</Link>
-          <Link to='/advanced' className="container-2">Advanced</Link>
-
+          <Link to='/beginner' className="container-2" onClick={beginnerHandler}>Basics</Link>
+          {beginner_passed===1 ? <Link to='/intermediate' onClick={intermHandler} className="container-2">Intermediate</Link> :
+          <div className="invalid-2" >Intermediate</div>
+          }
+          {interm_passed===1 ? <Link to='/advanced' onClick={advancedHandler} className="container-2">Advanced</Link>:
+          <div className="invalid-2" >Advanced</div>
+          } 
+          {advanced_passed===1 ? <Link to='/sumup'  className="container-2">Sum up</Link>:
+          <div className="invalid-2" >Sum up</div>
+          } 
+          {/* <Link to='/sumup'  className="container-2">Sum up</Link> */}
           {/* <div className="container-2" onClick={beginnerHandler}>
             Basics
           </div>
@@ -50,9 +70,6 @@ export default function Home() {
         </div>
       )}
 
-      {beginner && <Beginner />}
-      {interm && <Intermediate />}
-      {advanced && <Advanced />}
     </div>
   );
 }
